@@ -85,6 +85,10 @@ public:
         for (const auto &user : users) {
             if (user.username == newUser.username) {
                 cout << "Username already exists! Try a different one.\n";
+                
+    cout << "\nPress Enter to return to the menu...";
+    cin.ignore(); // Ignore any leftover newlines
+    cin.get();    // Wait for Enter key
                 return false;
             }
         }
@@ -92,6 +96,10 @@ public:
         users.push_back(newUser);
         saveUsersToFile();
         cout << "User registered successfully!\n";
+        
+    cout << "\nPress Enter to return to the menu...";
+    cin.ignore(); // Ignore any leftover newlines
+    cin.get();    // Wait for Enter key
         return true;
     }
 
@@ -107,11 +115,21 @@ public:
             if (user.username == username && user.password == password) {
                 loggedInUser = username;
                 cout << "Login successful!\n";
+                
+    cout << "\nPress Enter to return to the menu...";
+    cin.ignore(); // Ignore any leftover newlines
+    cin.get();    // Wait for Enter key
                 return true;
             }
         }
         cout << "Invalid credentials. Try again.\n";
+        
+    cout << "\nPress Enter to return to the menu...";
+    cin.ignore(); // Ignore any leftover newlines
+    cin.get();    // Wait for Enter key
         return false;
+        
+        
     }
 
     void addExpense() {
@@ -130,6 +148,10 @@ public:
         cin >> date;
         expenses.push_back(Expense(category, amount, date));
         cout << "Expense added successfully!\n";
+        
+    cout << "\nPress Enter to return to the menu...";
+    cin.ignore(); // Ignore any leftover newlines
+    cin.get();    // Wait for Enter key
     }
 
    
@@ -201,6 +223,44 @@ public:
     cin.ignore(); // Ignore any leftover newlines
     cin.get(); 
     }
+    
+    void filterByCategory() {
+    clearScreen();
+    if (expenses.empty()) {
+        cout << "No expenses recorded.\n";
+        cout << "\nPress Enter to return to the menu...";
+        cin.ignore();
+        cin.get();
+        return;
+    }
+
+    string category;
+    cout << "Enter category to filter: ";
+    cin >> category;
+
+    bool found = false;
+    double total = 0.0;
+    cout << "\n--- Expenses in Category: " << category << " ---\n";
+    for (const auto &exp : expenses) {
+        if (exp.category == category) {
+            exp.display();
+            total += exp.amount;
+            found = true;
+        }
+    }
+
+    if (!found) {
+        cout << "No expenses found in this category.\n";
+    } else {
+        cout << "\nTotal Expenses for " << category << ": $" << fixed << setprecision(2) << total << "\n";
+    }
+
+    cout << "\nPress Enter to return to the menu...";
+    cin.ignore();
+    cin.get();
+}
+
+
 };
 
 int main() {
@@ -224,7 +284,8 @@ int main() {
         cout << "3. Delete Expense\n";
         cout << "4. Show Total Expenses\n";
         cout << "5. Set Budget Limit\n";
-        cout << "6. Exit\n";
+        cout << "6. Filter Expense By Category\n";
+        cout << "7. Exit\n";
         cout << "Enter your choice: ";
         cin >> choice;
         switch (choice) {
@@ -233,7 +294,8 @@ int main() {
             case 3: tracker.deleteExpense(); break;
             case 4: tracker.showTotalExpenses(); break;
             case 5: tracker.setBudgetLimit(); break;
-            case 6: cout << "Exiting program.\n"; return 0;
+            case 6: tracker.filterByCategory();break;
+            case 7: cout << "Exiting program.\n"; return 0;
             default: cout << "Invalid choice. Try again.\n";
         }
     } while (true);
